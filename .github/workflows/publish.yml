@@ -1,0 +1,19 @@
+name: Publish package
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Publish Package
+        run: GITHUB_USER=rafaelladi GITHUB_TOKEN=${{ secrets.TOKEN }} ./gradlew publish
