@@ -1,11 +1,11 @@
 name: Publish package
 
 on:
-  create:
+  push:
     tags:
       - '*'
-    branches:
-      - master
+    branches-ignore:
+      - '!master'
 
 jobs:
   publish:
