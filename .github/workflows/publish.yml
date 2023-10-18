@@ -1,18 +1,14 @@
 name: Publish package
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types:
+      - created
 
 jobs:
   publish:
     runs-on: ubuntu-22.04
     steps:
-      - name: Exit if not on master branch
-        if: endsWith(github.ref, 'master') == false
-        run: exit 0
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -20,4 +16,4 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Publish Package
-        run: GITHUB_USER=${{ secrets.USER }} GITHUB_TOKEN=${{ secrets.TOKEN }} PACKAGE_VERSION=$GITHUB_REF_NAME ./gradlew publish
+        run: GITHUB_USER=${{ secrets.USER }} GITHUB_TOKEN=${{ secrets.TOKEN }} PACKAGE_VERSION=${{ github.event.release.tag_name }} ./gradlew publish
