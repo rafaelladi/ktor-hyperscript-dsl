@@ -1,7 +1,9 @@
 name: Publish package
 
 on:
-  push:
+  create:
+    tags:
+      - '*'
     branches:
       - master
 
@@ -16,4 +18,4 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Publish Package
-        run: GITHUB_USER=rafaelladi GITHUB_TOKEN=${{ secrets.TOKEN }} ./gradlew publish
+        run: GITHUB_USER=${{ secrets.USER }} GITHUB_TOKEN=${{ secrets.TOKEN }} PACKAGE_VERSION=${ GITHUB_REF#refs/tags/ } ./gradlew publish
