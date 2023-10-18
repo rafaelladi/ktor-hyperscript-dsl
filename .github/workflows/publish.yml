@@ -4,13 +4,15 @@ on:
   push:
     tags:
       - '*'
-    branches-ignore:
-      - '!master'
 
 jobs:
   publish:
     runs-on: ubuntu-22.04
     steps:
+      - name: Exit if not on master branch
+        if: endsWith(github.ref, 'master') == false
+        run: exit 0
+
       - name: Checkout
         uses: actions/checkout@v3
 
