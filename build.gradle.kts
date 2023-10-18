@@ -21,6 +21,7 @@ publishing {
     repositories {
         maven {
             name = "ktor-hyperscript-dsl"
+            version = System.getenv("PACKAGE_VERSION") ?: project.version
             url = uri("https://maven.pkg.github.com/rafaelladi/ktor-hyperscript-dsl")
             credentials {
                 username = project.findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_USER")
