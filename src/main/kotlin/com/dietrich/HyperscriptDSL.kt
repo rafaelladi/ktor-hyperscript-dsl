@@ -7,12 +7,12 @@ import kotlin.collections.plusAssign
 import kotlin.collections.set
 
 enum class Trigger(val value: String) {
-    CLICK("click")
+    CLICK("click"),
+    MOUSE_ENTER("mouseenter"),
+    MOUSE_LEAVE("mouseleave")
 }
 
-class HyperScriptBuilder {
-    private val commands = mutableListOf<String>()
-
+open class HyperScriptBuilder(private val commands: MutableList<String> = mutableListOf()) {
     fun on(trigger: Trigger) {
         commands += "on ${trigger.value}"
     }
@@ -28,7 +28,21 @@ class HyperScriptBuilder {
     fun build(): String = commands.joinToString(" ")
 }
 
-fun HTMLTag.hyperscript(builder: HyperScriptBuilder = HyperScriptBuilder(), block: HyperScriptBuilder.() -> Unit) {
-    val hyperScript = builder.apply(block).build()
-    attributes["_"] = hyperScript
+class HyperScriptOnClickBuilder : HyperScriptBuilder(mutableListOf("on click"))
+
+class HyperScript {
+    var builder: HyperScriptBuilder? = null
+
+    fun apply(tag: HTMLTag) {
+        tag.attributes["_"] = builder?.build() ?: ""
+    }
+}
+
+fun HyperScript.click(builder: HyperScriptOnClickBuilder = HyperScriptOnClickBuilder(), block: HyperScriptOnClickBuilder.() -> Unit) {
+    builder.apply(block)
+    this.builder = builder
+}
+
+fun HTMLTag.hyperscript(block: HyperScript.() -> Unit) {
+    HyperScript().apply(block).apply(this)
 }
