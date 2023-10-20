@@ -25,6 +25,10 @@ open class HyperScriptBuilder(private val commands: MutableList<String> = mutabl
         commands += "toggle $action"
     }
 
+    fun log(message: String) {
+        commands += "log '${message.replace("'", "\\'")}'"
+    }
+
     fun build(): String = commands.joinToString(" ")
 }
 
